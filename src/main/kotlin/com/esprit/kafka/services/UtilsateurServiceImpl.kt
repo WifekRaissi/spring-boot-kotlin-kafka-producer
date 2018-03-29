@@ -23,11 +23,12 @@ open class UtilisateurServiceImpl: UtilisateurService {
 
     override fun sendUtilisateur(data: Utilisateur){
         val test=data
+        val test2 = JSON.writeValueAsString(test)
 
-        val map = hashMapOf(org.springframework.messaging.MessageHeaders.CONTENT_TYPE to "application/octet-stream") as Map< String, Utilisateur>
-        val jsonInString = JSON.writeValueAsString(test)
+        val map = hashMapOf(org.springframework.messaging.MessageHeaders.CONTENT_TYPE to "application/octet-stream") as Map< String, Any>
 
-        val msg = createMessage(test, MessageHeaders(map))
+
+        val msg = createMessage(test2, MessageHeaders(map))
         output.output().send(msg)
     }
 
