@@ -21,14 +21,15 @@ open class UtilisateurServiceImpl: UtilisateurService {
     @Autowired
     lateinit var output: Source
 
-    override fun sendUtilisateur(data: Utilisateur){
-        val test=data
-        val test2 = JSON.writeValueAsString(test)
+    override fun sendUtilisateur(utilisateur: Utilisateur){
+
+        val dataString = JSON.writeValueAsString(utilisateur)
+        val datatByte=JSON.writeValueAsBytes(dataString)
+
 
         val map = hashMapOf(org.springframework.messaging.MessageHeaders.CONTENT_TYPE to "application/octet-stream") as Map< String, Any>
 
-
-        val msg = createMessage(test2, MessageHeaders(map))
+        val msg = createMessage(datatByte, MessageHeaders(map))
         output.output().send(msg)
     }
 
