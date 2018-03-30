@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 import org.springframework.cloud.stream.messaging.Source
 import org.springframework.messaging.MessageHeaders
 import org.springframework.messaging.support.MessageBuilder.createMessage
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 @Service
 open class UtilisateurServiceImpl: UtilisateurService {
@@ -21,16 +20,20 @@ open class UtilisateurServiceImpl: UtilisateurService {
     @Autowired
     lateinit var output: Source
 
-    override fun sendUtilisateur(utilisateur: Utilisateur){
-
+    override fun sendUtilisateur(data: Utilisateur){
+val utilisateur=data
         val dataString = JSON.writeValueAsString(utilisateur)
-        val datatByte=JSON.writeValueAsBytes(dataString)
 
 
         val map = hashMapOf(org.springframework.messaging.MessageHeaders.CONTENT_TYPE to "application/octet-stream") as Map< String, Any>
 
+        val datatByte=JSON.writeValueAsBytes(dataString)
+
         val msg = createMessage(datatByte, MessageHeaders(map))
+
         output.output().send(msg)
+        logger.info("Utilisateur received: " +  msg)
+
     }
 
 
